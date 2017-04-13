@@ -1,0 +1,33 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>索引列表</ion-title>
+    </ion-navbar>
+    <ion-searchbar  [(ngModel)]="cityName"  [showCancelButton]="shouldShowCancel"  (ionCancel)="searchEmpty($event)"   (ionInput)="startDot($event)"></ion-searchbar>
+</ion-header>
+
+
+
+
+<ion-content>
+    <ion-item-group *ngFor="let item of indexs" id="city_{{item}}">
+        <ion-item-divider color="light">{{item}}</ion-item-divider>
+        <ion-item  *ngFor="let item of cityDatas">{{item.name}}</ion-item>
+    </ion-item-group>
+</ion-content>
+
+
+
+<div  class="searchlist" (touchend)="mRelease()" (touchmove)="mTouch($event)" (click)="mTouch($event)">
+    <div *ngFor="let c of indexs" [style.height.px]="hIndex">
+        {{c}}
+    </div>
+</div>
+
+
+
+
+
+
+<div  *ngIf="showMiddle"  class="box">
+    {{hint}}
+</div>

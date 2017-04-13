@@ -1,0 +1,99 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Home2</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<div class="searchs">
+  <ul class="search">
+    <li class="li" (click)="this.search.searchSwitch(this.conf,'searchs')">排序</li>
+    <li class="li" (click)="this.search.searchSwitch(this.conf,'filt')">筛选</li>
+  </ul>
+
+  <ul class="filtcont" [style.display]="conf.view.search?'block':'none'">
+    <ion-list *ngFor="let item of conf.filt" (click)="this.search.sort(this.conf,$event,item.class_name)">
+      <li class="li">
+        <ion-icon name="checkmark"></ion-icon>{{item.name}}
+      </li>
+      <li class="line"></li>
+    </ion-list>
+  </ul>
+
+
+  <ul class="searchcont" [style.display]="conf.view.filt?'block':'none'">
+    <ion-list *ngFor="let item of conf.searchs">
+      <li class="li">
+        <p>{{item.name}}</p>
+        <div class="lists">
+          <a id="{{item.class_name+i.id}}" *ngFor="let i of item.sub_cat" (click)="this.search.isActives(this.conf,item,i,$event)">{{i.name}}</a>
+        </div>
+      </li>
+      <li class="line"></li>
+    </ion-list>
+
+    <ion-row padding>
+      <!--<ion-col>
+        <button ion-button outline small>
+          重置
+        </button>
+      </ion-col>-->
+      <ion-col text-right>
+        <button ion-button outline small (click)="this.search.confirm(this.conf)">
+          确定
+        </button>
+      </ion-col>
+    </ion-row>
+  </ul>
+</div>
+
+
+
+<div *ngIf="Alert" class="alerts" (click)="this.search.Alerthide(this.conf)"></div>
+
+<ion-content [style.display]="conf.nullData ? 'block' : 'none'">
+  <ion-refresher (ionRefresh)="this.list.doRefresh(this.conf,$event)">
+    <ion-refresher-content pullingIcon="none" pullingText="加载中。。。" refreshingSpinner="bubbles" refreshingText="Loading more data...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-card *ngFor="let i of conf.items">
+    <img src="http://www.csdu.net{{i.mphoto}}" />
+    <ion-card-content>
+      <ion-card-title>
+        {{i.name}}
+      </ion-card-title>
+      <p>
+        {{i.introduction}}
+      </p>
+    </ion-card-content>
+
+    <ion-row no-padding>
+      <ion-col>
+        <button ion-button clear small color="danger" icon-left>
+          <ion-icon name='star'></ion-icon>
+          收藏
+        </button>
+      </ion-col>
+      <ion-col text-right>
+        <button ion-button clear small color="danger" icon-left>
+          <ion-icon name='share-alt'></ion-icon>
+          分享
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+
+
+
+  <ion-infinite-scroll (ionInfinite)="this.list.doInfinite(this.conf,$event)">
+    <ion-infinite-scroll-content loadingSpinner="{{conf.infiniteIcon}}" loadingText="{{conf.loadtext}}">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+</ion-content>
+
+<ion-content [style.display]="conf.nullData ? 'none' : 'block'">
+  <ion-list class="nullData">
+    没有数据
+  </ion-list>
+</ion-content>
