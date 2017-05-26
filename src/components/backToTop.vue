@@ -45,7 +45,7 @@ export default {
 }
 </script>
 
-<style lang="sass">
+<style lang="css">
 #back-to-top {
     position: fixed;
     right: 30px;

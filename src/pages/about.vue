@@ -34,18 +34,18 @@ export default {
         }
     },
     computed: {},
-    created (){
+    created() {
         this.fetchAboutPage();
     },
-    mounted() {},
+    mounted() { },
     methods: {
-        fetchAboutPage (){
+        fetchAboutPage() {
             this.setLoading(true);
             let self = this;
             $.get(aboutmd)
                 .done(res => {
                     this.setLoading(false);
-                    if(!res){
+                    if (!res) {
                         //TODO 错误抛出
                         return;
                     }
@@ -57,7 +57,7 @@ export default {
                     this.setLoading(false);
                 })
         },
-        setLoading (state) {
+        setLoading(state) {
             this.$store.commit("setLoading", state);
         }
     },
@@ -67,5 +67,5 @@ export default {
 }
 </script>
 
-<style lang="sass">
+<style lang="css">
 </style>

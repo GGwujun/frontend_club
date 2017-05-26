@@ -7,11 +7,11 @@
                 <el-card class="box-card index">
                     <div slot="header" class="clearfix index-nav">
                         <el-menu id="navbar" theme="light" :default-active="curTab" class="el-menu-demo" mode="horizontal" router>
-                            <el-menu-item index="all" :route="{name: 'index', query: {tab: 'all'}}">全部</el-menu-item>
-                            <el-menu-item index="good" :route="{name: 'index', query: {tab: 'good'}}">精华</el-menu-item>
+                            <el-menu-item index="all" :route="{name: 'index', query: {tab: 'all'}}">ionic</el-menu-item>
+                            <!--<el-menu-item index="good" :route="{name: 'index', query: {tab: 'good'}}">精华</el-menu-item>
                             <el-menu-item index="share" :route="{name: 'index', query: {tab: 'share'}}">分享</el-menu-item>
                             <el-menu-item index="ask" :route="{name: 'index', query: {tab: 'ask'}}">问答</el-menu-item>
-                            <el-menu-item index="job" :route="{name: 'index', query: {tab: 'job'}}">招聘</el-menu-item>
+                            <el-menu-item index="job" :route="{name: 'index', query: {tab: 'job'}}">招聘</el-menu-item>-->
                         </el-menu>
                     </div>
                     <transition :name="transition">
@@ -30,7 +30,7 @@
 
 <script>
 import cvHead from "../components/header.vue";
-import cvList from  "../components/list.vue";
+import cvList from "../components/list.vue";
 
 export default {
     data() {
@@ -108,7 +108,7 @@ export default {
                 tabdiff = tab === this.queryData.tab;
             this.queryData.tab = tab;
             $.ajax({
-                url: "https://cnodejs.org/api/v1/topics",
+                url: "http://119.23.245.101:8080/Topics/selectArticle",
                 type: "GET",
                 data: this.queryData
             }).done((data) => {
@@ -158,7 +158,7 @@ export default {
                 return "";
             }
         },
-        scrollLoad: function() {
+        scrollLoad: function () {
             if (this.scrollLock)
                 return;
             let body = document.body,
@@ -175,7 +175,7 @@ export default {
             let map = ["all", "good", "share", "ask", "job"];
             return (map.indexOf(to) - map.indexOf(from)) > 0 ? 1 : -1;
         },
-        setLoading (state) {
+        setLoading(state) {
             this.$store.commit("setLoading", state);
         }
     },
@@ -186,25 +186,26 @@ export default {
 }
 </script>
 
-<style lang="sass">
-#content {
-    .index {
-        .el-card__header {
-            padding: 0;
-            background-color: #eff2f7;
-        }
-    }
+<style lang="css">
+#content .index .el-card__header {
+    padding: 0;
+    background-color: #eff2f7;
 }
+
+
 .grid-content {
     position: relative;
 }
+
 .el-card {
     border: none;
     border-radius: 0;
 }
-.index .el-card__body{
+
+.index .el-card__body {
     padding: 0;
 }
+
 .articles-lists {
     position: absolute;
     width: 100%;

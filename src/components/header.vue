@@ -1,12 +1,12 @@
 <template lang="html">
   <header id="header">
     <a id="logo">
-      <img src="https://o4j806krb.qnssl.com/public/images/cnodejs_light.svg" alt="" />
+      <img src="../assets/images/ionic.png" alt=""  style="max-height:60%;"/>
     </a>
     <el-menu id="navbar" theme="dark" :default-active="curPage" class="el-menu-demo" mode="horizontal" router>
       <el-menu-item index="index" :route="{name: 'index', query: {tab: 'all'}}">首页</el-menu-item>
-      <el-menu-item index="api" :route="{name: 'api'}">API</el-menu-item>
-      <el-menu-item index="about" :route="{name: 'about'}">关于</el-menu-item>
+      <!--<el-menu-item index="api" :route="{name: 'api'}">API</el-menu-item>-->
+      <!--<el-menu-item index="about" :route="{name: 'about'}">关于</el-menu-item>-->
       <el-menu-item index="login" :route="{name: 'login'}" v-if="!user.loginname">登录</el-menu-item>
       <el-submenu index="user" v-if="user.loginname">
         <template slot="title"><img :src="user.avatar" alt="" class="avatar"/>{{user.loginname}}<el-badge :value="user.message" :max="99" class="mark" v-if="user.message > 0"></el-badge></template>
@@ -36,7 +36,7 @@ export default {
         user: 'getUserInfo'
     }),
     watch: {
-        "$route" (to, from) {
+        "$route"(to, from) {
             let map = ["index", "api", "about", "login", "personal", "message", "newtopic"];
             this.curPage = map.indexOf(this.$route.name) < 0 ? "other" : this.$route.name; //如果router变化，将curPage转到该router
             if (this.$route.params.name === this.user.loginname) {
@@ -47,7 +47,7 @@ export default {
                 this.fetchUserInfo();
             }
         },
-        "user" () {
+        "user"() {
             if (this.user.loginname) {
                 this.fetchMessage();
                 this.fetchUserInfo();
@@ -132,38 +132,37 @@ export default {
 }
 </script>
 
-<style lang="sass">
-#header {
-    #logo {
-        width: 120px;
-        padding: 0 55px;
-        height: 60px;
-        display: block;
-        float: left;
-        position: relative;
-        z-index: 666;
-        img {
-            max-width: 100%;
-            max-height: 100%;
-            display: block;
-            margin: auto;
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-        }
-    }
-    #navbar {
-        .avatar {
-            width: 30px;
-            height: 30px;
-        }
-        .mark {
-            margin-top: 8px;
-            line-height: 1;
-            float: right;
-        }
-    }
+<style lang="css">
+#header #logo {
+    width: 120px;
+    padding: 0 55px;
+    height: 60px;
+    display: block;
+    float: left;
+    position: relative;
+    z-index: 666;
+}
+
+#header #logo img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#header #navbar .avatar {
+    width: 30px;
+    height: 30px;
+}
+
+#header #navbar .mark {
+    margin-top: 8px;
+    line-height: 1;
+    float: right;
 }
 </style>

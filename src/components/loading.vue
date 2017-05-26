@@ -10,10 +10,8 @@ export default {
 };
 </script>
 
-<style lang="sass">
-$offset: 126;
-$duration: 1.5s;
-$color: #20a0ff;
+<style lang="css">
+
 .spinner {
     position: fixed;
     z-index: 999;
@@ -21,7 +19,7 @@ $color: #20a0ff;
     top: 10px;
     opacity: 0;
     transition: opacity 0.15s ease;
-    animation: rotator $duration linear infinite;
+    animation: rotator 1.5s linear infinite;
     animation-play-state: paused;
 }
 
@@ -39,22 +37,22 @@ $color: #20a0ff;
 }
 
 .spinner .path {
-    stroke: $color;
-    stroke-dasharray: $offset;
+    stroke: #20a0ff;
+    stroke-dasharray: 126;
     stroke-dashoffset: 0;
     transform-origin: center;
-    animation: dash $duration ease-in-out infinite;
+    animation: dash 1.5s ease-in-out infinite;
 }
 @keyframes dash {
     0% {
-        stroke-dashoffset: $offset;
+        stroke-dashoffset: 126;
     }
     50% {
-        stroke-dashoffset: ($offset/2);
+        stroke-dashoffset: (126/2);
         transform: rotate(180deg);
     }
     100% {
-        stroke-dashoffset: $offset;
+        stroke-dashoffset: 126;
         transform: rotate(360deg);
     }
 }

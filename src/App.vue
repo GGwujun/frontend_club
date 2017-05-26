@@ -17,9 +17,9 @@ import "./assets/scss/normalize.scss";
 import "./assets/scss/common.scss";
 import "./assets/scss/animation.scss";
 import "./assets/css/github-markdown.css";
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 export default {
-    data (){
+    data() {
         return {
             transition: "slide-left"
         };
@@ -28,7 +28,7 @@ export default {
         loading: "getLoading"
     }),
     watch: {
-        "$route"(to, from){
+        "$route"(to, from) {
             this.transition = this.checkDirecition(to.name, from.name) && "slide-left" || "slide-right";
         }
     },
@@ -45,15 +45,14 @@ export default {
     }
 }
 </script>
-<style lang="sass">
-    .router-view{
-        width: 100%;
-        position: absolute;
-        -webkit-transition: all .3s cubic-bezier(.55,0,.1,1);
-        -moz-transition: all .3s cubic-bezier(.55,0,.1,1);
-        -ms-transition: all .3s cubic-bezier(.55,0,.1,1);
-        -o-transition: all .3s cubic-bezier(.55,0,.1,1);
-        transition: all .3s cubic-bezier(.55,0,.1,1);
-    }
-
+<style lang="css">
+.router-view {
+    width: 100%;
+    position: absolute;
+    -webkit-transition: all .3s cubic-bezier(.55, 0, .1, 1);
+    -moz-transition: all .3s cubic-bezier(.55, 0, .1, 1);
+    -ms-transition: all .3s cubic-bezier(.55, 0, .1, 1);
+    -o-transition: all .3s cubic-bezier(.55, 0, .1, 1);
+    transition: all .3s cubic-bezier(.55, 0, .1, 1);
+}
 </style>

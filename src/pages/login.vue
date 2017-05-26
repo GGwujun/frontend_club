@@ -116,7 +116,7 @@ export default {
 }
 </script>
 
-<style lang="sass">
+<style lang="css">
     .input-area {
         position: relative;
         text-align: center;

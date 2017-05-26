@@ -9,7 +9,7 @@
                                 <span>Api</span>
                             </header>
                             <main>
-                                <section class="markdown-body" v-html="apiContent"  v-if="apiContent">
+                                <section class="markdown-body" v-html="apiContent"  v-if="apiContent"></section>
                             </main>
                         </el-card>
                     </div>

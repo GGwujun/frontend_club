@@ -94,8 +94,8 @@
 
 <script>
 import cvHead from "../components/header.vue";
-import cvList from  "../components/list.vue";
-import cvAside from  "../components/aside.vue";
+import cvList from "../components/list.vue";
+import cvAside from "../components/aside.vue";
 
 export default {
     data() {
@@ -116,17 +116,17 @@ export default {
         }
     },
     computed: {},
-    created (){
+    created() {
         if (this.loginname) {
             this.fetchUserInfo();
             this.fetchCollectedTopics();
         }
     },
-    mounted() {},
+    mounted() { },
     watch: {
-        "$route" (to, from) {
+        "$route"(to, from) {
             //如果路由从一个主题进入到另一个主题，则异步加载主题详情
-            if(to.name === from.name){
+            if (to.name === from.name) {
                 this.loginname = to.params.name;
                 this.fetchUserInfo();
                 this.fetchCollectedTopics();
@@ -154,7 +154,7 @@ export default {
             });
         },
         //获取收藏话题
-        fetchCollectedTopics (){
+        fetchCollectedTopics() {
             let self = this;
             $.ajax({
                 url: "https://cnodejs.org/api/v1/topic_collect/" + self.loginname,
@@ -175,7 +175,7 @@ export default {
         getTypeClass(top, good, tab) {
             if (top) {
                 return "success";
-            } else if ( good) {
+            } else if (good) {
                 return "danger";
             } else if (tab == "ask") {
                 return "primary";
@@ -183,13 +183,13 @@ export default {
                 return "warning";
             } else if (tab == "share") {
                 return "gray";
-            }else if (!top && !good && !tab || (this.$route.query.tab === tab)) {
+            } else if (!top && !good && !tab || (this.$route.query.tab === tab)) {
                 return "hidden";
             } else {
                 return "";
             }
         },
-        setLoading (state) {
+        setLoading(state) {
             this.$store.commit("setLoading", state);
         }
     },
@@ -201,38 +201,39 @@ export default {
 }
 </script>
 
-<style lang="sass">
-    .basic-info{
-        display: -webkit-flex;
-        display: -ms-flex;
-        display: flex;
-        flex-flow: row nowrap;
-        .user-avatar{
-            max-width: 100px;
-            max-height: 100px;
-            
-        }
-        .info{
-            flex-grow: 1;
-            margin-left: 10px;
-            display: -webkit-flex;
-            display: -ms-flex;
-            display: flex;
-            flex-flow: column nowrap;
-            justify-content: space-around;
-            .info-list{
-                span:first-of-type{
-                color: #838383;
-                width: 70px;
-                display: inline-block;
-                text-align: right;
-                font-size: 12px;
-                }
-                .github{
-                    color: #20a0ff;
-                    text-decoration: underline;
-                }
-            }
-        }
-    }
+<style lang="css">
+.basic-info {
+    display: -webkit-flex;
+    display: -ms-flex;
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.user-avatar {
+    max-width: 100px;
+    max-height: 100px;
+}
+
+.info {
+    flex-grow: 1;
+    margin-left: 10px;
+    display: -webkit-flex;
+    display: -ms-flex;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+}
+
+.info-list span:first-of-type {
+    color: #838383;
+    width: 70px;
+    display: inline-block;
+    text-align: right;
+    font-size: 12px;
+}
+
+.info-list .github {
+    color: #20a0ff;
+    text-decoration: underline;
+}
 </style>

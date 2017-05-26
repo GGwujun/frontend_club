@@ -90,155 +90,159 @@
 
 <script>
 import cvHead from "../components/header.vue";
-import cvAside from  "../components/aside.vue";
-import {mapGetters} from "vuex";
+import cvAside from "../components/aside.vue";
+import { mapGetters } from "vuex";
 
 export default {
-  data () {
-    return {
-        messages: {
-            has_read_messages: [],
-            hasnot_read_messages: []
+    data() {
+        return {
+            messages: {
+                has_read_messages: [],
+                hasnot_read_messages: []
+            }
         }
+    },
+    computed: mapGetters({
+        user: "getUserInfo"
+    }),
+    created() {
+        if (this.user.accesstoken) {
+            this.fetchMessages();
+        }
+    },
+    mounted() { },
+    methods: {
+        //获取已读和未读消息
+        fetchMessages() {
+            this.setLoading(true);
+            let self = this;
+            $.ajax({
+                url: "https://cnodejs.org/api/v1/messages",
+                type: "GET",
+                data: {
+                    accesstoken: self.user.accesstoken
+                }
+            }).done((res) => {
+                self.setLoading(false);
+                if (!res || !res.success) {
+                    //TODO 是否错误抛出  有待商榷
+                    self.$message({
+                        showClose: true,
+                        message: "数据获取失败，请稍后再试！",
+                        type: "warning"
+                    });
+                    return;
+                }
+                self.messages = res.data || self.messages;
+            }).fail((error) => {
+                this.setLoading(false);
+                //TODO 是否错误抛出  有待商榷
+                self.$message({
+                    showClose: true,
+                    message: "数据获取失败，请稍后再试！",
+                    type: "warning"
+                })
+            });
+        },
+        //消息全部已读
+        markAll() {
+            if (!this.user.accesstoken) {
+                return;
+            }
+            if (this.messages.hasnot_read_messages.length < 1) {
+                this.$message({
+                    showClose: true,
+                    message: "暂无未读消息",
+                    type: "info"
+                });
+                return;
+            }
+            this.setLoading(true);
+            let self = this;
+            $.ajax({
+                url: "https://cnodejs.org/api/v1/message/mark_all",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    accesstoken: self.user.accesstoken
+                }
+            }).done((res) => {
+                this.setLoading(false);
+                if (!res || !res.success) {
+                    self.$message({
+                        showClose: true,
+                        message: "操作失败",
+                        type: "warning"
+                    });
+                    return;
+                }
+                self.messages.has_read_messages = self.messages.hasnot_read_messages.concat(self.messages.has_read_messages);
+                self.messages.hasnot_read_messages = [];
+                self.$message({
+                    showClose: true,
+                    message: "消息全部设置已读！",
+                    type: "success"
+                });
+                self.$store.commit("setValue", {
+                    key: "message",
+                    value: 0
+                });
+                localStorage.message = 0;
+            }).fail((error) => {
+                this.setLoading(false);
+                self.$message({
+                    showClose: true,
+                    message: "操作失败",
+                    type: "warning"
+                });
+            });
+        },
+        setLoading(state) {
+            this.$store.commit("setLoading", state);
+        }
+    },
+    components: {
+        cvHead,
+        cvAside
     }
-  },
-  computed: mapGetters({
-      user: "getUserInfo"
-  }),
-  created (){
-      if(this.user.accesstoken){
-          this.fetchMessages();
-      }
-  },
-  mounted () {},
-  methods: {
-      //获取已读和未读消息
-      fetchMessages () {
-          this.setLoading(true);
-          let self = this;
-          $.ajax({
-              url: "https://cnodejs.org/api/v1/messages",
-              type: "GET",
-              data: {
-                  accesstoken: self.user.accesstoken
-              }
-          }).done((res) => {
-              self.setLoading(false);
-              if (!res || !res.success) {
-                  //TODO 是否错误抛出  有待商榷
-                  self.$message({
-                      showClose: true,
-                      message: "数据获取失败，请稍后再试！",
-                      type: "warning"
-                  });
-                  return;
-              }
-              self.messages = res.data || self.messages;
-          }).fail((error) => {
-              this.setLoading(false);
-              //TODO 是否错误抛出  有待商榷
-              self.$message({
-                  showClose: true,
-                  message: "数据获取失败，请稍后再试！",
-                  type: "warning"
-              })
-          });
-      },
-      //消息全部已读
-      markAll (){
-          if(!this.user.accesstoken){
-            return;
-          }
-          if(this.messages.hasnot_read_messages.length < 1){
-              this.$message({
-                  showClose: true,
-                  message: "暂无未读消息",
-                  type: "info"
-              });
-              return;
-          }
-          this.setLoading(true);
-          let self = this;
-          $.ajax({
-              url: "https://cnodejs.org/api/v1/message/mark_all",
-              type: "POST",
-              dataType: "json",
-              data: {
-                  accesstoken: self.user.accesstoken
-              }
-          }).done((res) => {
-              this.setLoading(false);
-              if(!res || !res.success){
-                  self.$message({
-                      showClose: true,
-                      message: "操作失败",
-                      type: "warning"
-                  });
-                  return;
-              }
-              self.messages.has_read_messages = self.messages.hasnot_read_messages.concat(self.messages.has_read_messages);
-              self.messages.hasnot_read_messages = [];
-              self.$message({
-                  showClose: true,
-                  message: "消息全部设置已读！",
-                  type: "success"
-              });
-              self.$store.commit("setValue", {
-                  key: "message",
-                  value: 0
-              });
-              localStorage.message = 0;
-          }).fail((error) => {
-              this.setLoading(false);
-              self.$message({
-                  showClose: true,
-                  message: "操作失败",
-                  type: "warning"
-              });
-          });
-      },
-      setLoading (state) {
-          this.$store.commit("setLoading", state);
-      }
-  },
-  components: {
-      cvHead,
-      cvAside
-  }
 }
 </script>
 
-<style lang="sass">
-    .messages{
-        .message-item{
-            border-top: 1px solid #f0f0f0;
-            padding: 10px 0;
-            &:nth-of-type(1) {
-              border-top: none;
-              padding-top: 0;
-            }
-            .messager-avatar{
-                display: inline-block;
-                img{
-                    width: 30px;
-                    height: 30px;
-                }
-            }
-            .link{
-                color: #20a0ff;
-            }
-            .message-content{
-                display: inline-block;
-            }
-            .message-time{
-              float: right;
-              text-align: right;
-              min-width: 50px;
-              display: inline-block;
-              white-space: nowrap;
-              color: #778087;
-              font-size: 11px;
-            }
-        }
-    }
+<style lang="css">
+.messages .message-item {
+    border-top: 1px solid #f0f0f0;
+    padding: 10px 0;
+}
+
+.messages .message-item:nth-of-type(1) {
+    border-top: none;
+    padding-top: 0;
+}
+
+.messages .message-item .messager-avatar {
+    display: inline-block;
+}
+
+.messages .message-item .messager-avatar img {
+    width: 30px;
+    height: 30px;
+}
+
+.messages .message-item .link {
+    color: #20a0ff;
+}
+
+.message-content {
+    display: inline-block;
+}
+
+.messages .message-item .message-time {
+    float: right;
+    text-align: right;
+    min-width: 50px;
+    display: inline-block;
+    white-space: nowrap;
+    color: #778087;
+    font-size: 11px;
+}
 </style>
