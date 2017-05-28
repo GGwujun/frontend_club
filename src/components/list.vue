@@ -2,7 +2,7 @@
         <div class="articles">
             <section class="article-list">
                 <article class="topic" v-for="(item, index) in topics" v-if="topics" :key="index">
-                    <router-link :to="{name: 'user', params: {name: item.loginname}}" class="creater-avatar avatar">
+                    <router-link :to="{name: 'user', params: {name: item.uid}}" class="creater-avatar avatar">
                         <img :src="item.avatar_url" alt="" />
                     </router-link>
                     <span class="count" v-if="!hideCount">

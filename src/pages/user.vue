@@ -139,10 +139,10 @@ export default {
             this.setLoading(true);
             let self = this;
             $.ajax({
-                url: "http://119.23.245.101:8080/User/GetUser",
+                url: "http://119.23.245.101:8080/User/GetUserid",
                 type: "GET",
                 data: {
-                    loginid: self.loginid
+                    id: self.loginid
                 }
             }).done((res) => {
                 self.setLoading(false);

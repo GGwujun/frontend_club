@@ -5,11 +5,11 @@
         <span v-else>个人信息</span>
       </div>
       <div class="text">
-          <router-link :to="{name:'user', params: {name: author.loginid}}" class="author-avatar">
+          <router-link :to="{name:'user', params: {name: author.id}}" class="author-avatar">
               <img :src="author.avatar_url" alt="" class="img"/>
           </router-link>
           <section class="author-info">
-              <router-link :to="{name:'user', params: {name: author.loginid}}" class="author-name">
+              <router-link :to="{name:'user', params: {name: author.id}}" class="author-name">
                   <span v-text="author.username"></span>
               </router-link>
               <p class="author-detail">
