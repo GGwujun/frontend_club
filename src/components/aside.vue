@@ -1,22 +1,22 @@
 <template lang="html">
-  <el-card :body-style="bodyStyle" v-if="author.loginname">
+  <el-card :body-style="bodyStyle" v-if="author.username">
       <div slot="header" class="clearfix">
         <span v-if="hasRecent">作者信息</span>
         <span v-else>个人信息</span>
       </div>
       <div class="text">
-          <router-link :to="{name:'user', params: {name: author.loginname}}" class="author-avatar">
+          <router-link :to="{name:'user', params: {name: author.loginid}}" class="author-avatar">
               <img :src="author.avatar_url" alt="" class="img"/>
           </router-link>
           <section class="author-info">
-              <router-link :to="{name:'user', params: {name: author.loginname}}" class="author-name">
-                  <span v-text="author.loginname"></span>
+              <router-link :to="{name:'user', params: {name: author.loginid}}" class="author-name">
+                  <span v-text="author.username"></span>
               </router-link>
               <p class="author-detail">
                   <span class="author-score">积分：{{author.score}}</time></span>
               </p>
           </section>
-          <section class="author-recent-topic" v-if="hasRecent">
+          <!--<section class="author-recent-topic" v-if="hasRecent">
               <header class="title">
                   <span>最近其他文章</span>
               </header>
@@ -29,7 +29,7 @@
                       <li v-else>...</li>
                   </ul>
               </main>
-          </section>
+          </section>-->
       </div>
     </el-card>
 </template>
@@ -49,7 +49,7 @@ export default {
             }
         }
     },
-    props: ["authorName", "topicId", "hasRecent"],
+    props: ["authorId", "topicId", "hasRecent"],
     computed: {
         recentLength: function () {
             let length = this.author.recent_topics.length;
@@ -57,14 +57,14 @@ export default {
         }
     },
     created() {
-        if (this.authorName) {
+        if (this.authorId) {
             this.fetchUserInfo();
         }
     },
     mounted() { },
     watch: {
-        "authorName"() {
-            if (this.authorName) {
+        "authorId"() {
+            if (this.authorId) {
                 this.fetchUserInfo();
             }
         }
@@ -74,14 +74,19 @@ export default {
         fetchUserInfo() {
             let self = this;
             $.ajax({
-                url: "https://cnodejs.org/api/v1/user/" + self.authorName,
+                url: "http://119.23.245.101:8080/User/GetUserid",
                 type: "GET",
+                data: {
+                    id: self.authorId
+                }
             }).done((res) => {
                 if (!res || !res.success) {
                     //TODO 是否错误抛出  有待商榷
                     return;
                 }
                 this.author = res.data;
+                console.log(this.author)
+                this.author.recent_topics = [];
             }).fail((error) => {
                 //TODO 是否错误抛出  有待商榷
             });

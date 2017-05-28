@@ -2,7 +2,7 @@
   <div id="container">
   <main id="main" v-if="!topicerror">
       <el-row :gutter="20">
-        <el-col :span="24">
+        <el-col :span="18">
             <el-row>
                 <el-col :span="24" id="topic">
                     <div class="grid-content bg-purple">
@@ -13,15 +13,14 @@
                                     <h1 v-text="topic.title" class="title"></h1>
                                 </div>
                                 <p class="topic-info">
-                                    <span>发布于 {{topic.create_at | getDateFromNow}}</span>
-                                    <!-- 这里必须加v-if="topic.author" 不然console会报错，暂不清楚为什么 还有下面cvAside处 -->
+                                    <span>发布于 {{topic.create_time | getDateFromNow}}</span>
                                     <span v-if="topic">作者 {{topic.loginname}}</span>
                                     <span>{{topic.visit_count}} 次浏览</span>
                                     <span v-if="topic.replies">{{topic.replies.length}} 评论</span>
                                     <span>来自 {{ "" | getArticleType(topic.good, topic.tabs) }}</span>
-                                    <el-button class="editBtn actionBtn" type="text" @click.native="topicEdit" v-if="user.loginname && user.loginname == topic.loginname">
+                                    <!--<el-button class="editBtn actionBtn" type="text" @click.native="topicEdit" v-if="user.loginname && user.loginname == topic.loginname">
                                         <i class="el-icon-edit"></i>编辑
-                                    </el-button>
+                                    </el-button>-->
                                     <el-button class="collectBtn actionBtn" type="text" @click.native="topicCollect" v-if="user.loginname">
                                         <i :class="collectBtn[collectBtn.type]"></i>
                                         {{ topic.is_collect && '已' || ''}}收藏
@@ -36,8 +35,8 @@
                     </div>
                 </el-col>
             </el-row>
-            <!--<cvComment :topic="topic" :comment-list="topic.replies" :comment-count="topic.reply_count"></cvComment>-->
-            <!--<el-row  id="reply-panel" class="cv-panel">
+            <cvComment :topic="topic" :comment-list="topic.replies" :comment-count="topic.reply_count"></cvComment>
+           <!--<el-row  id="reply-panel" class="cv-panel">
                 <el-col :span="24" id="reply-detail">
                     <div class="grid-content bg-purple">
                         <el-card class="box-card">
@@ -54,10 +53,8 @@
         </el-col>
         <el-col :span="6">
             <div class="grid-content bg-purple">
-                <cvAside :topic-id="topic.id"
-                    :hasRecent="true"
-                    :author-name="topic.loginname"
-                    v-if="topic.loginname"></cvAside>
+                <cvAside  :authorId="topic.uid" :topicId="topic.id"  :hasRecent="true">
+                </cvAside>
             </div>
         </el-col>
     </el-row>
@@ -123,11 +120,12 @@ export default {
             let self = this;
             self.setLoading(true);
             $.ajax({
-                url: "http://119.23.245.101:8080/Topics/findArticle?id=1", //+ self.topic.id,
+                url: "http://119.23.245.101:8080/Topics/findArticle",
                 type: "GET",
                 dataType: "json",
                 data: {
                     mdrender: true,
+                    id: this.topic.id,
                     accesstoken: self.user.accesstoken
                 }
             }).done((res) => {
@@ -137,7 +135,7 @@ export default {
                     return;
                 }
                 self.topic = res.data || self.topic;
-                self.topic.typeClass = this.getTypeClass(self.topic.top, self.topic.good, self.topic.tab)
+                self.topic.typeClass = this.getTypeClass(self.topic.top, self.topic.good, self.topic.tabs)
                 if (self.topic.is_collect) {
                     self.collectBtn.type = "on";
                 }
@@ -154,78 +152,83 @@ export default {
         },
         //收藏主题
         topicCollect() {
-            if (this.collectBtn.lock) {
-                return;
-            }
-            let self = this,
-                url = "https://cnodejs.org/api/v1/topic_collect/collect",
-                isCollected = self.collectBtn.type === "on";
-            self.collectBtn.switch("load");
-            self.collectBtn.lock = true;
-            //取消收藏的url
-            if (isCollected) {
-                url = "https://cnodejs.org/api/v1/topic_collect/de_collect";
-            }
-            $.ajax({
-                url: url,
-                type: "POST",
-                dataType: "json",
-                data: {
-                    topic_id: self.topic.id,
-                    accesstoken: self.user.accesstoken
-                }
-            }).done((res) => {
-                if (!res || !res.success) {
-                    //TODO 是否错误抛出  有待商榷
-                    self.$message({
-                        showClose: true,
-                        message: "操作失败",
-                        type: "warning"
-                    });
-                    return;
-                }
-                self.$message({
-                    showClose: true,
-                    message: (isCollected && "取消" || "") + "收藏成功",
-                    type: "success"
-                });
-                self.collectBtn.switch(isCollected && "off" || "on");
-                self.topic.is_collect = !isCollected;
-                self.collectBtn.lock = false;
-            }).fail((error) => {
-                //TODO 是否错误抛出  有待商榷
-                self.error = true;
-                self.$message({
-                    showClose: true,
-                    message: "操作失败",
-                    type: "warning"
-                });
+            // if (this.collectBtn.lock) {
+            //     return;
+            // }
+            // let self = this,
+            //     url = "https://cnodejs.org/api/v1/topic_collect/collect",
+            //     isCollected = self.collectBtn.type === "on";
+            // self.collectBtn.switch("load");
+            // self.collectBtn.lock = true;
+            // //取消收藏的url
+            // if (isCollected) {
+            //     url = "https://cnodejs.org/api/v1/topic_collect/de_collect";
+            // }
+            // $.ajax({
+            //     url: url,
+            //     type: "POST",
+            //     dataType: "json",
+            //     data: {
+            //         topic_id: self.topic.id,
+            //         accesstoken: self.user.accesstoken
+            //     }
+            // }).done((res) => {
+            //     if (!res || !res.success) {
+            //         //TODO 是否错误抛出  有待商榷
+            //         self.$message({
+            //             showClose: true,
+            //             message: "操作失败",
+            //             type: "warning"
+            //         });
+            //         return;
+            //     }
+            //     self.$message({
+            //         showClose: true,
+            //         message: (isCollected && "取消" || "") + "收藏成功",
+            //         type: "success"
+            //     });
+            //     self.collectBtn.switch(isCollected && "off" || "on");
+            //     self.topic.is_collect = !isCollected;
+            //     self.collectBtn.lock = false;
+            // }).fail((error) => {
+            //     //TODO 是否错误抛出  有待商榷
+            //     self.error = true;
+            //     self.$message({
+            //         showClose: true,
+            //         message: "操作失败",
+            //         type: "warning"
+            //     });
+            // });
+            self.$message({
+                showClose: true,
+                message: "正在开发中",
+                type: "warning"
             });
         },
         //编辑主题
-        topicEdit() {
-            if (!this.user.accesstoken) {
-                this.$router.push({ name: "login", query: { redirect: encodeURIComponent(this.$route.path) } });
-            } else {
-                let editTopic = {
-                    tab: this.topic.tab,
-                    title: this.topic.title,
-                    content: ""
-                };
-                sessionStorage.editTopic = JSON.stringify(editTopic);
-                this.$router.push({ name: "edittopic", params: { id: this.topic.id } });
-            }
-        },
+        // topicEdit() {
+        //     if (!this.user.accesstoken) {
+        //         this.$router.push({ name: "login", query: { redirect: encodeURIComponent(this.$route.path) } });
+        //     } else {
+        //         let editTopic = {
+        //             tab: this.topic.tab,
+        //             title: this.topic.title,
+        //             content: ""
+        //         };
+        //         sessionStorage.editTopic = JSON.stringify(editTopic);
+        //         this.$router.push({ name: "edittopic", params: { id: this.topic.id } });
+        //     }
+        // },
         getTypeClass(top, good, tab) {
             if (top) {
                 return "success";
             } else if (good) {
                 return "danger";
-            } else if (tab == "ask") {
+            } else if (tab == "html") {
                 return "primary";
-            } else if (tab == "job") {
+            } else if (tab == "html2") {
                 return "warning";
-            } else if (tab == "share") {
+            } else if (tab == "html3") {
                 return "gray";
             } else if (!top && !good && !tab || (this.$route.query.tab === tab)) {
                 return "hidden";
@@ -283,5 +286,6 @@ export default {
 
 #container .topic-content img {
     cursor: -webkit-zoom-in;
+    max-width: 100%!important;
 }
 </style>

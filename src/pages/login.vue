@@ -11,8 +11,11 @@
                         <main>
                             <div class="input-area">
                               <el-form ref="form" label-width="80px" @submit.prevent="login">
-                                <el-form-item label="token">
-                                  <el-input v-model.trim="at" :maxlength="36" :minlength='36' placeholder="请输入个人accesstoken..."></el-input>
+                                <el-form-item label="用户名">
+                                  <el-input v-model.trim="loginid" :maxlength="36" :minlength='36' placeholder="请输入登陆账号..."></el-input>
+                                </el-form-item>
+                                <el-form-item label="密码">
+                                  <el-input v-model.trim="password" :maxlength="36" :minlength='36' placeholder="请输入密码..."></el-input>
                                 </el-form-item>
                                 <el-form-item>
                                     <el-button type="primary" @click.native="goBack" v-if="redirect"><i class="el-icon-caret-left"></i>返回上一页</el-button>
@@ -33,7 +36,8 @@
 export default {
     data() {
         return {
-            at: "",
+            loginid: "",
+            password: '',
             alert: {
                 title: "",
                 type: "",
@@ -42,7 +46,7 @@ export default {
             redirect: this.$route.query.redirect || ""
         }
     },
-    mounted() {},
+    mounted() { },
     methods: {
         goBack() {
             let redirect = decodeURIComponent(this.$route.query.redirect);
@@ -50,7 +54,7 @@ export default {
         },
         login() {
             let self = this,
-                accesstoken = self.at;
+                accesstoken = self.loginid;
             if (!accesstoken) {
                 self.$message({
                     showClose: true,
@@ -62,22 +66,25 @@ export default {
             this.setLoading(true);
             $.ajax({
                 type: "POST",
-                url: 'https://cnodejs.org/api/v1/accesstoken',
-                dataType: 'json',
+                url: 'http://119.23.245.101:8080/User/login',
                 data: {
-                    accesstoken: accesstoken
-                }
+                    loginid: self.loginid,
+                    password: self.password
+                },
+                dataType: 'json'
             }).done((res) => {
                 this.setLoading(false);
                 if (!res || !res.success) {
                     self.errorHandle();
                     return;
                 }
+                debugger;
+                res = res.data;
                 let user = {
                     id: res.id,
-                    loginname: res.loginname,
+                    loginname: res.username,
                     avatar: res.avatar_url,
-                    accesstoken: accesstoken,
+                    accesstoken: res.loginid,
                     score: null,
                     message: null
                 };
@@ -102,14 +109,14 @@ export default {
                 self.errorHandle();
             });
         },
-        errorHandle (){
+        errorHandle() {
             self.$message({
                 showClose: true,
                 message: "登录出错，请稍候再试！",
                 type: "warning"
             });
         },
-        setLoading (state) {
+        setLoading(state) {
             this.$store.commit("setLoading", state);
         }
     }
@@ -117,10 +124,10 @@ export default {
 </script>
 
 <style lang="css">
-    .input-area {
-        position: relative;
-        text-align: center;
-        width: 50%;
-        margin-left: 25%;
-    }
+.input-area {
+    position: relative;
+    text-align: center;
+    width: 50%;
+    margin-left: 25%;
+}
 </style>

@@ -9,14 +9,14 @@
                               <el-card class="box-card">
                                   <div slot="header" class="clearfix">
                                       <div>
-                                         <span v-if="loginname">基本信息</span>
+                                         <span v-if="user.username">基本信息</span>
                                       </div>
                                   </div>
                                   <main class="basic-info">
                                       <img :src="user.avatar_url" alt="" class="user-avatar"/>
                                       <section class="info">
-                                          <p class="info-list" v-if="user.loginname">
-                                              <span>用户名：</span><span>{{user.loginname}}</span>
+                                          <p class="info-list" v-if="user.username">
+                                              <span>用户名：</span><span>{{user.username}}</span>
                                           </p>
                                           <p class="info-list" v-if="user.score || user.score == 0">
                                               <span>积分：</span><span>{{user.score}}</span>
@@ -24,8 +24,8 @@
                                           <p class="info-list" v-if="user.githubUsername">
                                               <span>Github：</span><a class="github" target="new" :href="'https://github.com/' + user.githubUsername">@{{user.githubUsername}}</a>
                                           </p>
-                                          <p class="info-list" v-if="user.create_at">
-                                              <span>创建于：</span><span>{{user.create_at | getDateFromNow}} （{{user.create_at | formatDate}}）</span>
+                                          <p class="info-list" v-if="user.create_time">
+                                              <span>创建于：</span><span>{{user.create_time | getDateFromNow}} （{{user.create_time | formatDate}}）</span>
                                           </p>
                                       </section>
                                   </main>
@@ -33,7 +33,7 @@
                           </div>
                       </el-col>
                   </el-row>
-                  <el-row class="cv-panel">
+                  <!--<el-row class="cv-panel">
                       <el-col :span="24">
                           <div class="grid-content bg-purple">
                               <el-card class="box-card">
@@ -48,8 +48,8 @@
                               </el-card>
                           </div>
                       </el-col>
-                  </el-row>
-                  <el-row class="cv-panel">
+                  </el-row>-->
+                  <!--<el-row class="cv-panel">
                       <el-col :span="24">
                           <div class="grid-content bg-purple">
                               <el-card class="box-card">
@@ -64,8 +64,8 @@
                               </el-card>
                           </div>
                       </el-col>
-                  </el-row>
-                  <el-row class="cv-panel">
+                  </el-row>-->
+                  <!--<el-row class="cv-panel">
                       <el-col :span="24">
                           <div class="grid-content bg-purple">
                               <el-card class="box-card">
@@ -80,11 +80,11 @@
                               </el-card>
                           </div>
                       </el-col>
-                  </el-row>
+                  </el-row>-->
               </el-col>
               <el-col :span="6">
                   <div class="grid-content bg-purple">
-                      <cvAside :author-name="loginname" :hasRecent="false" v-if="loginname"></cvAside>
+                      <cvAside :authorId="user.id" :hasRecent="false" v-if="loginid"></cvAside>
                   </div>
               </el-col>
           </el-row>
@@ -100,7 +100,7 @@ import cvAside from "../components/aside.vue";
 export default {
     data() {
         return {
-            loginname: this.$route.params.name || "",
+            loginid: this.$route.params.name || "",
             user: {},
             collectedTopics: [],
             loading: {
@@ -117,7 +117,7 @@ export default {
     },
     computed: {},
     created() {
-        if (this.loginname) {
+        if (this.loginid) {
             this.fetchUserInfo();
             this.fetchCollectedTopics();
         }
@@ -127,7 +127,7 @@ export default {
         "$route"(to, from) {
             //如果路由从一个主题进入到另一个主题，则异步加载主题详情
             if (to.name === from.name) {
-                this.loginname = to.params.name;
+                this.loginid = to.params.loginid;
                 this.fetchUserInfo();
                 this.fetchCollectedTopics();
             }
@@ -139,8 +139,11 @@ export default {
             this.setLoading(true);
             let self = this;
             $.ajax({
-                url: "https://cnodejs.org/api/v1/user/" + self.loginname,
+                url: "http://119.23.245.101:8080/User/GetUser",
                 type: "GET",
+                data: {
+                    loginid: self.loginid
+                }
             }).done((res) => {
                 self.setLoading(false);
                 if (!res || !res.success) {
@@ -156,21 +159,21 @@ export default {
         //获取收藏话题
         fetchCollectedTopics() {
             let self = this;
-            $.ajax({
-                url: "https://cnodejs.org/api/v1/topic_collect/" + self.loginname,
-                type: "GET",
-            }).done((res) => {
-                if (!res || !res.success) {
-                    //TODO 是否错误抛出  有待商榷
-                    return;
-                }
-                res.data.forEach((v, i) => {
-                    v.typeClass = self.getTypeClass(v.top, v.good, v.tab);
-                });
-                this.collectedTopics = res.data;
-            }).fail((error) => {
-                //TODO 是否错误抛出  有待商榷
-            });
+            // $.ajax({
+            //     url: "https://cnodejs.org/api/v1/topic_collect/" + self.loginname,
+            //     type: "GET",
+            // }).done((res) => {
+            //     if (!res || !res.success) {
+            //         //TODO 是否错误抛出  有待商榷
+            //         return;
+            //     }
+            //     res.data.forEach((v, i) => {
+            //         v.typeClass = self.getTypeClass(v.top, v.good, v.tab);
+            //     });
+            //     this.collectedTopics = res.data;
+            // }).fail((error) => {
+            //     //TODO 是否错误抛出  有待商榷
+            // });
         },
         getTypeClass(top, good, tab) {
             if (top) {

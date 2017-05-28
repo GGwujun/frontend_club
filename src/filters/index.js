@@ -1,4 +1,4 @@
-import tool from "./libs/tool.js";
+import tool from "../libs/tool.js";
 
 export function getDateFromNow(time) {
   return tool.dateFromNow(new Date() - new Date(time));

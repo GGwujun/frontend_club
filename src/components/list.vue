@@ -15,7 +15,7 @@
                     :hit="false"
                     :class="item.typeClass">{{ item.top | getArticleType(item.good, item.tab) }}</el-tag>
                     <router-link :to="{name: 'topic', params: {id: item.id}}" class="title" v-text="item.title"></router-link>
-                    <span class="last-reply-time" v-if="item.create_at">发布于 {{ item.create_at | getDateFromNow }}</span>
+                    <span class="last-reply-time" v-if="item.create_time">发布于 {{ item.create_time | getDateFromNow }}</span>
                 </article>
             </section>
         </div>
@@ -101,5 +101,6 @@ export default {
     white-space: nowrap;
     color: #778087;
     font-size: 11px;
+    line-height: 40px;
 }
 </style>

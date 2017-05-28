@@ -10,7 +10,7 @@ import "../assets/plugins/simplemde/simplemde.min.css";
 import Simplemde from "../assets/plugins/simplemde/simplemde.min.js";
 import tool from "../libs/tool";
 import Markdown from "markdown";
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
 let markdown = Markdown.markdown,
     simplemde = null;
@@ -29,16 +29,18 @@ export default {
     computed: mapGetters({
         user: "getUserInfo"
     }),
-    created (){
-        if(!this.user.loginname){
+    created() {
+        if (!this.user.loginname) {
+            debugger;
+            console.log(tool)
             this.placeholder = "您未登录，评论将暂存...";
             this.btnText = "登录后评论";
         }
     },
     watch: {
-        "user.loginname" (){
+        "user.loginname"() {
             console.log(this.user.loginname);
-            if(!this.user.loginname){
+            if (!this.user.loginname) {
                 this.placeholder = "您未登录，评论将暂存...";
                 this.btnText = "登录后评论";
             }
@@ -47,54 +49,49 @@ export default {
         }
     },
     mounted() {
-        if(this.replyId){
+        if (this.replyId) {
             let editor_top = $("#answereditor" + this.flag).offset().top,
                 window_top = $(window).scrollTop(),
                 window_height = $(window).height();
-            if(editor_top > window_top + window_height){
+            if (editor_top > window_top + window_height) {
                 $("body").animate({
                     scrollTop: $("#answereditor" + this.flag).offset().top - window_height / 3
                 }, 500);
             }
         }
-        simplemde = new Simplemde({
-            element: document.getElementById('answereditor' + this.flag),
-            forceSync: true,
-            toolbarTips: true,
-            showIcons: ["bold", "italic", "strikethrough", "heading", "heading-smaller", "heading-bigger", "heading-1", "heading-2", "heading-3", "code", "quote", "unordered-list", "ordered-list", "clean-block", "link", "image", "table", "horizontal-rule", "preview", "side-by-side", "fullscreen", "guide"]
-        })
-        this.replyTo && simplemde.value("@" + this.replyTo);
-        if(this.topic.id === sessionStorage.topicId){
-            this.replyCache && simplemde.value(this.replyCache);
-        }
+        
+        // this.replyTo && simplemde.value("@" + this.replyTo);
+        // if (this.topic.id === sessionStorage.topicId) {
+        //     this.replyCache && simplemde.value(this.replyCache);
+        // }
     },
     methods: {
-        unLoginHandle (){
+        unLoginHandle() {
             let replyTmp = document.getElementById("answereditor" + this.flag).value;
-            if(replyTmp){
+            if (replyTmp) {
                 sessionStorage.topicId = this.topic.id;
                 sessionStorage.replyCache = replyTmp;
             }
             this.$notify.info({
-              title: '消息',
-              message: '评论将暂存...'
+                title: '消息',
+                message: '评论将暂存...'
             });
-            this.$router.replace({name: "login", query: {redirect: encodeURIComponent(this.$route.path)}});
+            this.$router.replace({ name: "login", query: { redirect: encodeURIComponent(this.$route.path) } });
         },
-        clearReplyCache () {
+        clearReplyCache() {
             this.replyCache = "";
             sessionStorage.removeItem("topicId");
             sessionStorage.removeItem("replyCache");
         },
         reply() {
-            if(!this.user.loginname){
+            if (!this.user.loginname) {
                 this.unLoginHandle();
-            }else{
+            } else {
                 let self = this,
-                //这里不能使用simplemde.value()，
-                //如果评论里的回复框一旦有一个以上打开过，则simplemde的codemirror将这个框的值映射过来
-                //导致话题评论框点击发表时，replyContent的值是刚打开过的评论回复框的值
-                replyContent = document.getElementById("answereditor" + this.flag).value || "";
+                    //这里不能使用simplemde.value()，
+                    //如果评论里的回复框一旦有一个以上打开过，则simplemde的codemirror将这个框的值映射过来
+                    //导致话题评论框点击发表时，replyContent的值是刚打开过的评论回复框的值
+                    replyContent = document.getElementById("answereditor" + this.flag).value || "";
                 if (!replyContent) {
                     self.$message({
                         showClose: true,
@@ -104,13 +101,13 @@ export default {
                     return;
                 }
                 let linkUsers = tool.linkUsers(replyContent),
-                htmlText = markdown.toHTML(linkUsers) + self.tagText,
-                rendered_reply_content = $('<div class="markdown-text"></div>').append(htmlText)[0].outerHTML,
-                post_date = new Date(),
-                post_data = {
-                    accesstoken: self.user.accesstoken,
-                    content: replyContent + self.tagText,
-                };
+                    htmlText = markdown.toHTML(linkUsers) + self.tagText,
+                    rendered_reply_content = $('<div class="markdown-text"></div>').append(htmlText)[0].outerHTML,
+                    post_date = new Date(),
+                    post_data = {
+                        accesstoken: self.user.accesstoken,
+                        content: replyContent + self.tagText,
+                    };
                 if (self.replyId) {
                     post_data.reply_id = self.replyId;
                 }
@@ -165,4 +162,4 @@ export default {
 }
 </script>
 
-<style lang="sass"></style>
+<style lang="css"></style>

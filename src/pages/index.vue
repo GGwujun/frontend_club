@@ -2,7 +2,7 @@
 <div id="container">
 <main id="main">
     <el-row :gutter="20" id="container">
-        <el-col :span="18" id="content" :offset="3" class="cv cv-100">
+        <el-col :span="22" id="content" :offset="1" class="cv cv-100">
             <div class="grid-content bg-purple">
                 <el-card class="box-card index">
                     <div slot="header" class="clearfix index-nav">
