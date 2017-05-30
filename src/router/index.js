@@ -47,6 +47,12 @@ const routes = () => {
             require(["../pages/login.vue"], resolve);
         }
     }, {
+        path: "/regest",
+        name: "regest",
+        component: (resolve) => {
+            require(["../pages/regest.vue"], resolve);
+        }
+    }, {
         path: "/user/:name",
         name: "user",
         component: (resolve) => {

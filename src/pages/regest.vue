@@ -10,16 +10,15 @@
                         </header>
                         <main>
                             <div class="input-area">
-                              <el-form ref="form" label-width="80px" @submit.prevent="login">
+                              <el-form ref="form" label-width="80px" @submit.prevent="regest">
                                 <el-form-item label="用户名">
-                                  <el-input v-model.trim="loginid" :maxlength="36" :minlength='36' placeholder="请输入登陆账号..."></el-input>
+                                  <el-input v-model.trim="loginid" :maxlength="36" :minlength='36' placeholder="请输入账号..."></el-input>
                                 </el-form-item>
                                 <el-form-item label="密码">
                                   <el-input v-model.trim="password" :maxlength="36" :minlength='36' placeholder="请输入密码..."></el-input>
                                 </el-form-item>
                                 <el-form-item>
-                                    <el-button type="primary" @click.native="goBack" v-if="redirect"><i class="el-icon-caret-left"></i>返回上一页</el-button>
-                                    <el-button type="primary" @click.native="login">登录</el-button>
+                                    <el-button type="primary" @click.native="regest">注册</el-button>
                                 </el-form-item>
                               </el-form>
                             </div>
@@ -52,13 +51,13 @@ export default {
             let redirect = decodeURIComponent(this.$route.query.redirect);
             this.$router.replace(redirect);
         },
-        login() {
+        regest() {
             let self = this,
                 accesstoken = self.loginid;
             if (!accesstoken) {
                 self.$message({
                     showClose: true,
-                    message: "请输入登陆账号",
+                    message: "请输入账号",
                     type: "error"
                 })
                 return;
@@ -66,7 +65,7 @@ export default {
             this.setLoading(true);
             $.ajax({
                 type: "POST",
-                url: 'http://119.23.245.101:8080/User/login',
+                url: 'http://119.23.245.101:8080/User/regest',
                 data: {
                     loginid: self.loginid,
                     password: self.password
@@ -95,7 +94,7 @@ export default {
                 this.$store.dispatch("setUserInfo", user).then(() => {
                     self.$message({
                         showClose: true,
-                        message: "登录成功",
+                        message: "注册成功",
                         type: "success",
                         onClose() {
                             let redirect = decodeURIComponent(self.$route.query.redirect || "/");
@@ -111,7 +110,7 @@ export default {
         errorHandle() {
             self.$message({
                 showClose: true,
-                message: "登录出错，请稍候再试！",
+                message: "注册出错，请稍候再试！",
                 type: "warning"
             });
         },

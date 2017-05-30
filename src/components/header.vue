@@ -8,6 +8,7 @@
       <!--<el-menu-item index="api" :route="{name: 'api'}">API</el-menu-item>-->
       <!--<el-menu-item index="about" :route="{name: 'about'}">关于</el-menu-item>-->
       <el-menu-item index="login" :route="{name: 'login'}" v-if="!user.loginname">登录</el-menu-item>
+      <el-menu-item index="regest" :route="{name: 'regest'}" v-if="!user.loginname">注册</el-menu-item>
       <el-submenu index="user" v-if="user.loginname">
         <template slot="title"><img :src="user.avatar" alt="" class="avatar"/>{{user.loginname}}<el-badge :value="user.message" :max="99" class="mark" v-if="user.message > 0"></el-badge></template>
         <!--<el-menu-item index="personal" :route="{name: 'user', params: {name: user.loginname}}">个人主页</el-menu-item>-->
