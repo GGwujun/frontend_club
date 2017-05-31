@@ -16,7 +16,7 @@
         <!--<el-menu-item index="message" :route="{name: 'message'}"><i class='el-icon-message'></i>消息<el-badge :value="user.message" :max="99" class="mark"></el-badge></el-menu-item>-->
         <el-menu-item index="" @click.native="logout"><i class="el-icon-upload2"></i>退出</el-menu-item>
       </el-submenu>
-      <!--<el-menu-item index="newtopic" :route="{name: 'newtopic'}" v-if="user.loginname">发布话题</el-menu-item>-->
+      <el-menu-item index="newtopic" @click="goAdmin()" v-if="user.loginname">登陆后台发布话题</el-menu-item>
       <el-menu-item index="other" v-show="false"></el-menu-item>
   </el-menu>
   </header>
@@ -56,6 +56,9 @@ export default {
         }
     },
     methods: {
+        goAdmin(){
+            window.location.href="www.baidu.com";
+        },
         //获取用户信息 just for 获取用户积分
         fetchUserInfo() {
             let self = this;
