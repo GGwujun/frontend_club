@@ -57,7 +57,7 @@ export default {
     },
     methods: {
         goAdmin(){
-            window.location.href="www.baidu.com";
+			window.open("admin"); 
         },
         //获取用户信息 just for 获取用户积分
         fetchUserInfo() {
