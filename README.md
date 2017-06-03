@@ -1,57 +1,77 @@
-# cnode-vue
+### ionic介绍
 
-> 基于vue和vue-router构建的cnodejs web网站SPA
+此项目是一个以ionic学习为主的一个社区版，并且包含一个后台管理系统，里面有完整并且实际的增删改查功能，有普通模式操作，也有高级模式操作，用此项目，可以快速帮您完成后台功能。
+此项目重点突出在于架构模式，相比那些有很多页面，但架构混乱的项目来说，一个真正的前端应该更在意项目的架构。
 
-## 所用知识
-* [vue2.0](http://vuefe.cn/)
-* [vue-router2.0](http://vuefe.cn/vue-router/)
-* [vuex2.0](https://github.com/vuejs/vuex)
-* [element-ui](http://element.eleme.io/)
-* [es6](http://es6.ruanyifeng.com/)
-* [webpack](http://webpack.github.io/)
-* [gulp](http://www.gulpjs.com.cn/)
 
-## 构建步骤
+### 访问账号
+#### 账号注册？
+**后台不需要注册，前台注册后即可同样登录后台，最近增加了权限功能。**
+
+**大家注册的账号默认都归属到管理员(我)的下边，所以，除了我，别人无法操作你以及你添加的数据。**
+
+#### 在线演示查看[ionic演示](http://www.frontender.club)
+
+使用步骤
 
 ``` bash
+# get project
+
+(前台)
+git clone https://github.com/GGwujun/frontend_club.git
+
+(后台)
+git clone https://github.com/GGwujun/FrontEnd_Admin.git
+
+#进入项目目录
+
+
 # 安装依赖
 npm install
 
-# 开发模式（localhost:8080/index_dev.html，hot reload）
+# 启动server
 npm run dev
 
-# 生产模式（JS压缩，webpack）
+# 编译
 npm run build
-
-# 生产模式（JS，css压缩，webpack+gulp，常用）
-npm run dist
-
 ```
-## 当前版本
 
-v1.1.0
 
-## 后续计划
 
-* 优化细节
-* 优化webpack+gulp构建过程
-* 学习利用vuex做状态管理，利用vue-resource获取数据
-* 开发移动端vue SPA
+#### 架构模式特点：
+* 易于协作开发
+* 方便拓展与维护
+* 结构清晰明了
+* 灵活，可自定义配置
 
-## Log
 
-* todo          数据获取采用vue-resource，尝试服务端渲染，动态更新组件
+> 基于这个模式，可以拓展更为强大的功能，诸如类似其他后台模板里面的那些功能等，都可以用组件化形式开发，注入到此项目。
 
-* 2016-10-29    新增vuex进行用户登录状态管理，组件切换添加过渡效果，v1.1
 
-* 2016-10-21    新增webpack+gulp打包构建，v1.0
 
-* 2016-10-17    实现评论及新建话题功能
+### 涵盖技术包含
 
-* 2016-10-15    结合element-ui进行组件开发
+#### 技术点：
+* [Vue](http://cn.vuejs.org/) 当下最流行的前端JavaScript框架
+* [VueRouter](https://router.vuejs.org/zh-cn/) 基于Vue的路由插件
+* [Vuex](https://vuex.vuejs.org/zh-cn/) 管理Vue中多组件共享状态的插件，类似react的redux
+* [Axios](https://github.com/mzabriskie/axios) 当前最流行的一个http库
+* [ElementUI](https://github.com/ElemeFE/element) 饿了么团队开发的基于Vue的一套UI组件库
 
-* 2016-10-12    项目文件结构确定
+#### 富文本：
+* [wangEditor](http://www.wangeditor.com/) 一款国人开发的富文本编辑器
 
-## 说明
+#### 七牛云：
+* [七牛云开发文档](https://developer.qiniu.com/) 官方开发者文档
+* [七牛JavaScript版SDK](https://developer.qiniu.com/kodo/sdk/1283/javascript) Web端JavaScript版SDK文档
+* [七牛PHP版SDK](https://developer.qiniu.com/kodo/sdk/1241/php) 服务端PHP版SDK文档
 
-node_modules目录纯粹为公司网不好，懒得install，可无视之，自行install
+
+
+### 沟通交流
+ 1. 如果您有什么问题，可提issues，也可加QQ群讨论：225192209。
+ 2. 更新日志：可查看提交记录，有较大的更新都会在提交日志中明确写出。
+ 3. 广告：个人官方公众号：“web前端开发大师兄” 交流技术，交流心得。
+ 
+ ![Alt text](http://upload-images.jianshu.io/upload_images/3533080-d8a8170d95642628.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
